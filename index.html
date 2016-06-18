@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <title>Upload SMILES</title>
+        <link rel="stylesheet" type="text/css" href="http://127.0.0.1:3000/css/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://127.0.0.1:3000/js/speck/static/index.css">
+    </head>
+    <body>
+        <form id="uploadForm" enctype="multipart/form-data" action="/api/smiles" method="post" class="dropzone">
+            <input type="file" name="filename" />
+            <input type="submit" value="Upload" name="submit">
+        </form>
+
+        <div id="render-container" style="display:none">
+            <canvas id="renderer-canvas"></canvas>
+        </div>
+
+    </body>
+  
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <script type="text/javascript" src="http://127.0.0.1:3000/js/app.js"></script>
+    <script src="http://127.0.0.1:3000/js/speck/static/bundle.js"></script>
+    <script>
+
+        (function(){
+            var dropzone = document.getElementById('uploadForm');
+
+            dropzone.ondrop = function(e){
+                e.preventDefault();
+                this.className = 'dropzone';
+                upload();
+            }
+
+            dropzone.ondragover = function(){
+                this.className = 'dropzone dragover';
+                return false;
+            }
+
+            dropzone.ondragleave = function(){
+                this.className = 'dropzone';
+                return false;
+            }
+
+        }());
+
+        function upload(){
+            var url = 'http://127.0.0.1:3000/api/smiles';
+            var form = $("#uploadForm");
+            var data = new FormData(form[0]);
+
+            $.ajax({
+                type        : 'post',
+                dataType    : 'json',
+                url         : url,
+                data        : data,
+                enctype     : "multipart/form-data",
+                cache       : false,
+                contentType : false,
+                processData : false,
+                success     : function(data) {},
+                complete : function(data) {
+                    console.log(data.responseText);
+                }
+            });
+        }
+
+        function sendUpgradeReq(){
+            var url = 'https://www.ebi.ac.uk/chembl/api/utils/smiles2ctab';
+            var form = $("#uploadForm");
+            var data = new FormData(form[0]);
+
+            $.ajax({
+                type        : 'post',
+                dataType    : 'json',
+                url         : url,
+                data        : data,
+                enctype     : "multipart/form-data",
+                cache       : false,
+                contentType : false,
+                processData : false,
+                success     : function(data) {},
+                complete : function(data) {
+                    console.log(data.responseText);
+                }
+            });
+        }
+
+
+        // $(document).ready(function() {
+        //     var dir = "/uploads/";
+        //     s = new Smiles(dir);
+        //     $('#uploadForm').submit(function(event) {
+        //         $(this).ajaxSubmit({
+        //             error: function(xhr) {
+    	   //             status('Error: ' + xhr.status);
+        //             },
+
+        //             success: function(response) {
+        //                 $.get(dir + response, function(txt){
+        //                     if(s.isValid(txt)){
+        //                         console.log(s.get_context());
+        //                         sendUpgradeReq();
+        //                     }
+        //                     else{
+        //                         console.log("there is error in file");
+        //                     }
+        //                 });
+        //             }
+        //         });
+        //         return false;
+        //     });
+
+        // });
+    </script>
+</html>
